@@ -1,38 +1,35 @@
 %%%% Assignment 1 %%%%
 
-%% Exercise 1 - Plotting density
+%% Exercise 1 - Plotting üdf of stable
 
-a=1.7   % alpha
-b=-0.4  % beta
-c=2     % scale
-d=0.3   % location
-s=10^4  % sample size (10^6)
+a=1.7;   % alpha
+b=-0.4;  % beta 
+c=2;     % scale
+d=0.3;   % location
+n=4000;  % sample size
+x=-20:.001:20;  %x=-6:0.02:6;
 
-% 1. line: kernel density estimate based on, say, 1e6 (one million) simulated IID stable variates
-% - simulate a stable random variable
-x=-6:0.02:6;
-x = stabgen(s,a,b,c,d,1)
+%%% kernel density estimate 
+% generating a random sample of size n from the S_{a,b}(d, c) distribution
+% and plot the resulting density
+eststab = stabgen(n,a,b,c,d,2)
+[f,c] = ksdensity(eststab, x);
+figure, plot(c, f, 'r--', 'linewidth', 2)
+xlim([-20 20])
 
-% - pdf
-f17 = asymstab(x,a,b)
 
-% 2. line: true density, based on analytic calculation
+%%% true density 
+% calculating the actual theoretical values of a S_{a,b} distribution
+truestab = asymstab(x, a, b);
+%truestab = asymstabplus(x, a, b, c, d);
+hold on, plot(x, truestab, 'b-', 'linewidth', 2), hold off
 
-% Final plot
-figure
+% adjust plot
+legend('Simulated PDF', ...
+       'Theoretical PDF', 'Location', 'NorthWest')
+title('PDFs of Stable Distribution')
+xlabel("x"); ylabel("S_{1.7, -0.4}(2, 0.3)(x)")
 set(gca, 'fontsize', 16)
-plot(x,f17,'r-','linewidth',2);
-legend('\alpha = 1.7, \beta = -0.4','\alpha = ??, \beta = ??','Location','northwest')
-
-%hold on
-%plot(x,pdf2,'r-.');
-%plot(x,pdf3,'k--');
-%title('')
-%xl = xlim;
-%xlim([xl(1)-0.25 xl(2)])
-%xlabel('')
-%ylabel('')
-%hold off
 
 
 %% Exercise 2
